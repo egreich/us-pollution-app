@@ -38,17 +38,7 @@ This app uses real data from the EPA Air Quality System API.
 
 ### Monitored Cities
 
-The app fetches data for these major US cities:
-- Los Angeles, CA
-- New York, NY
-- Chicago, IL
-- Houston, TX
-- Phoenix, AZ
-- Philadelphia, PA
-- San Antonio, TX
-- San Diego, CA
-- Dallas, TX
-- San Jose, CA
+The app fetches data for ta subset of major US cities.
 
 ## License
 
