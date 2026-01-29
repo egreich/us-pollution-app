@@ -13,8 +13,23 @@ st.set_page_config(
     page_title="US Pollution Timeline",
     page_icon="🌍",
     layout="wide",
-    initial_sidebar_state="expanded"
+    initial_sidebar_state="collapsed",
+    menu_items={
+        'Get Help': None,
+        'Report a bug': None,
+        'About': None
+    }
 )
+
+# Force dark theme
+st.markdown("""
+<style>
+    .stApp {
+        background-color: #0e1117;
+        color: #fafafa;
+    }
+</style>
+""", unsafe_allow_html=True)
 
 # Title and description
 st.title("How does legislation impact pollution over time?")
@@ -61,46 +76,88 @@ except Exception as e:
     st.exception(e)
     st.stop()
 
-# Sidebar controls
-st.sidebar.header("Controls")
+# Define base color scheme for different pollutants (neon palette)
+pollutant_base_colors = {
+    "PM2.5": [255, 20, 147],     # Neon Pink
+    "Ozone": [0, 255, 255],      # Cyan
+    "SO2": [255, 255, 0],        # Bright Yellow
+    "NO2": [186, 85, 211],       # Neon Purple
+    "CO": [57, 255, 20],         # Neon Green
+}
+
+# Get available years
+available_years = sorted(pollution_data['year'].unique())
+
+# Main title
+st.title("US Air Pollution Visualization")
+st.caption("Data from 40 major US cities")
 
 # Year selection
-min_year = int(pollution_data['year'].min())
-max_year = int(pollution_data['year'].max())
-selected_year = st.sidebar.slider(
+selected_year = st.select_slider(
     "Select Year",
-    min_value=min_year,
-    max_value=max_year,
-    value=max_year,
-    step=1
+    options=available_years,
+    value=available_years[-1]
 )
 
-# Pollutant selection
-pollutants = pollution_data['pollutant'].unique()
-selected_pollutant = st.sidebar.selectbox(
-    "Select Pollutant",
-    options=pollutants,
-    index=0
-)
-
-# Filter data
+# Filter data by year only (show all pollutants)
 filtered_data = pollution_data[
-    (pollution_data['year'] == selected_year) & 
-    (pollution_data['pollutant'] == selected_pollutant)
-]
+    pollution_data['year'] == selected_year
+].copy()
 
 # Create two columns for layout
 col1, col2 = st.columns([2, 1])
 
 with col1:
-    st.subheader(f"{selected_pollutant} Levels in {selected_year}")
-    st.caption("Data from 10 largest US cities by population")
+    # Add border styling around map
+    st.markdown("""
+    <style>
+    [data-testid="stPyDeckChart"] {
+        border: 2px solid #4a4a4a;
+        border-radius: 8px;
+        padding: 5px;
+    }
+    </style>
+    """, unsafe_allow_html=True)
     
+    st.subheader(f"Pollutants in {selected_year}")
     # Create map visualization
     if not filtered_data.empty:
         # Normalize pollution values for visualization
         max_pollution = filtered_data['value'].max()
         min_pollution = filtered_data['value'].min()
+        
+        # Add jitter offset for each pollutant (increased for better separation)
+        import numpy as np
+        pollutant_offset = {
+            "PM2.5": -0.25,
+            "Ozone": -0.125,
+            "SO2": 0.0,
+            "NO2": 0.125,
+            "CO": 0.25,
+        }
+        filtered_data['jitter_lat'] = filtered_data.apply(
+            lambda row: row['latitude'] + pollutant_offset.get(row['pollutant'], 0), axis=1
+        )
+        filtered_data['jitter_lon'] = filtered_data.apply(
+            lambda row: row['longitude'] + pollutant_offset.get(row['pollutant'], 0), axis=1
+        )
+        
+        # Normalize heights per pollutant (since units differ)
+        filtered_data['height'] = 0
+        for pollutant in filtered_data['pollutant'].unique():
+            mask = filtered_data['pollutant'] == pollutant
+            pollutant_data = filtered_data[mask]
+            max_val = pollutant_data['value'].max()
+            if max_val > 0:
+                normalized = pollutant_data['value'] / max_val
+                filtered_data.loc[mask, 'height'] = normalized * 200000
+        
+        # Use solid colors per pollutant (no gradient)
+        def get_solid_color(row):
+            base_color = pollutant_base_colors.get(row['pollutant'], [255, 140, 0])
+            return base_color + [230]  # Full opacity
+        
+        filtered_data['color'] = filtered_data.apply(get_solid_color, axis=1)
         
         # Create layers list
         layers = []
@@ -114,46 +171,36 @@ with col1:
                     data=state_geojson,
                     stroked=True,
                     filled=False,
-                    line_width_min_pixels=1,
-                    get_line_color=[100, 100, 100, 200],
-                    get_line_width=2,
+                    line_width_min_pixels=2,
+                    get_line_color=[200, 200, 200, 255],
+                    get_line_width=3,
                     pickable=False,
                 )
             )
         
-        # Add heatmap layer for pollution data
+        # Add 3D column/bar layer for pollution data
         layers.append(
             pdk.Layer(
-                "HeatmapLayer",
+                "ColumnLayer",
                 data=filtered_data,
-                get_position=["longitude", "latitude"],
-                get_weight="value",
-                radiusPixels=60,
-                intensity=1,
-                threshold=0.05,
-                opacity=0.8,
-            )
-        )
-        
-        # Add scatter plot layer for city markers
-        layers.append(
-            pdk.Layer(
-                "ScatterplotLayer",
-                data=filtered_data,
-                get_position=["longitude", "latitude"],
-                get_radius=15000,
-                get_fill_color=[255, 140, 0, 180],
+                get_position=["jitter_lon", "jitter_lat"],
+                get_elevation="height",
+                elevation_scale=2.5,
+                radius=25000,
+                get_fill_color="color",
                 pickable=True,
                 auto_highlight=True,
+                extruded=True,
             )
         )
         
-        # Set the initial view state
+        # Set the initial view state with pitch for 3D view
         view_state = pdk.ViewState(
             latitude=37.0902,
             longitude=-95.7129,
             zoom=3.5,
-            pitch=0,
+            pitch=60,  # Increased tilt for more dramatic 3D effect
+            bearing=0,
         )
         
         # Create the deck
@@ -165,25 +212,40 @@ with col1:
                         "<b>{pollutant}:</b> {value} {unit}",
                 "style": {"backgroundColor": "steelblue", "color": "white"}
             },
-            map_style="mapbox://styles/mapbox/light-v9"
+            map_style="mapbox://styles/mapbox/dark-v9"
         )
         
         st.pydeck_chart(deck)
     else:
-        st.warning("No data available for the selected filters.")
+        available_years = sorted(pollution_data['year'].unique())
+        st.warning(f"No data available for {selected_year}. Available years: {min(available_years)}-{max(available_years)}")
 
 with col2:
+    st.markdown("""
+    <style>
+    [data-testid="stMetricValue"] {
+        color: #ffffff !important;
+        font-weight: 600;
+    }
+    [data-testid="stMetricLabel"] {
+        color: #e0e0e0 !important;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+    
     st.subheader("Pollution Statistics")
     
     if not filtered_data.empty:
-        avg_value = filtered_data['value'].mean()
-        max_value = filtered_data['value'].max()
-        min_value = filtered_data['value'].min()
-        unit = filtered_data['unit'].iloc[0]
-        
-        st.metric("Average Level", f"{avg_value:.2f} {unit}")
-        st.metric("Maximum", f"{max_value:.2f} {unit}")
-        st.metric("Minimum", f"{min_value:.2f} {unit}")
+        # Show statistics for each pollutant
+        for pollutant in sorted(filtered_data['pollutant'].unique()):
+            pollutant_data = filtered_data[filtered_data['pollutant'] == pollutant]
+            avg_value = pollutant_data['value'].mean()
+            unit = pollutant_data['unit'].iloc[0]
+            color = pollutant_base_colors.get(pollutant, [255, 140, 0])
+            color_hex = f"#{color[0]:02x}{color[1]:02x}{color[2]:02x}"
+            
+            st.markdown(f"**<span style='color:{color_hex}; font-size: 18px;'>{pollutant}</span>**", unsafe_allow_html=True)
+            st.metric("Average", f"{avg_value:.2f} {unit}")
     else:
         st.info("Select data to view statistics")
 
@@ -191,27 +253,28 @@ with col2:
 st.markdown("---")
 st.subheader("Pollution Trends & Legislative Timeline")
 
-# Create timeline data for the selected pollutant
-timeline_data = pollution_data[
-    pollution_data['pollutant'] == selected_pollutant
-].groupby('year')['value'].mean().reset_index()
-
-# Get unit for the selected pollutant
-pollutant_unit = pollution_data[pollution_data['pollutant'] == selected_pollutant]['unit'].iloc[0]
-
 # Create plotly figure
 fig = go.Figure()
 
-# Add pollution trend line
-fig.add_trace(go.Scatter(
-    x=timeline_data['year'],
-    y=timeline_data['value'],
-    mode='lines+markers',
-    name=f'{selected_pollutant} Average',
-    line=dict(color='#1f77b4', width=3),
-    marker=dict(size=6),
-    hovertemplate=f'<b>Year:</b> %{{x}}<br><b>Average:</b> %{{y:.2f}} {pollutant_unit}<extra></extra>'
-))
+# Add trend line for each pollutant
+for pollutant in sorted(pollution_data['pollutant'].unique()):
+    timeline_data = pollution_data[
+        pollution_data['pollutant'] == pollutant
+    ].groupby('year')['value'].mean().reset_index()
+    
+    pollutant_unit = pollution_data[pollution_data['pollutant'] == pollutant]['unit'].iloc[0]
+    color = pollutant_base_colors.get(pollutant, [255, 140, 0])
+    color_str = f'rgb({color[0]}, {color[1]}, {color[2]})'
+    
+    fig.add_trace(go.Scatter(
+        x=timeline_data['year'],
+        y=timeline_data['value'],
+        mode='lines+markers',
+        name=pollutant,
+        line=dict(color=color_str, width=2),
+        marker=dict(size=4),
+        hovertemplate=f'<b>Year:</b> %{{x}}<br><b>{pollutant}:</b> %{{y:.2f}} {pollutant_unit}<extra></extra>'
+    ))
 
 # Add legislation markers
 for _, law in legislation.iterrows():
@@ -227,7 +290,7 @@ for _, law in legislation.iterrows():
 # Update layout
 fig.update_layout(
     xaxis_title="Year",
-    yaxis_title=f"{selected_pollutant} Level ({pollutant_unit})",
+    yaxis_title="Pollution Level (varies by pollutant)",
     hovermode='x unified',
     height=400,
     showlegend=True,

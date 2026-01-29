@@ -13,6 +13,7 @@ EPA_API_KEY = os.getenv("EPA_API_KEY")
 
 # Major US cities with their county and state FIPS codes for EPA API
 CITIES_CONFIG = [
+    # Top 10 by population
     {"city": "Los Angeles", "state": "06", "county": "037", "latitude": 34.0522, "longitude": -118.2437},
     {"city": "New York", "state": "36", "county": "061", "latitude": 40.7128, "longitude": -74.0060},
     {"city": "Chicago", "state": "17", "county": "031", "latitude": 41.8781, "longitude": -87.6298},
@@ -23,6 +24,38 @@ CITIES_CONFIG = [
     {"city": "San Diego", "state": "06", "county": "073", "latitude": 32.7157, "longitude": -117.1611},
     {"city": "Dallas", "state": "48", "county": "113", "latitude": 32.7767, "longitude": -96.7970},
     {"city": "San Jose", "state": "06", "county": "085", "latitude": 37.3382, "longitude": -121.8863},
+    
+    # Additional major cities for better geographic coverage
+    {"city": "Austin", "state": "48", "county": "453", "latitude": 30.2672, "longitude": -97.7431},
+    {"city": "Jacksonville", "state": "12", "county": "031", "latitude": 30.3322, "longitude": -81.6557},
+    {"city": "Fort Worth", "state": "48", "county": "439", "latitude": 32.7555, "longitude": -97.3308},
+    {"city": "Columbus", "state": "39", "county": "049", "latitude": 39.9612, "longitude": -82.9988},
+    {"city": "Charlotte", "state": "37", "county": "119", "latitude": 35.2271, "longitude": -80.8431},
+    {"city": "San Francisco", "state": "06", "county": "075", "latitude": 37.7749, "longitude": -122.4194},
+    {"city": "Indianapolis", "state": "18", "county": "097", "latitude": 39.7684, "longitude": -86.1581},
+    {"city": "Seattle", "state": "53", "county": "033", "latitude": 47.6062, "longitude": -122.3321},
+    {"city": "Denver", "state": "08", "county": "031", "latitude": 39.7392, "longitude": -104.9903},
+    {"city": "Boston", "state": "25", "county": "025", "latitude": 42.3601, "longitude": -71.0589},
+    {"city": "El Paso", "state": "48", "county": "141", "latitude": 31.7619, "longitude": -106.4850},
+    {"city": "Detroit", "state": "26", "county": "163", "latitude": 42.3314, "longitude": -83.0458},
+    {"city": "Nashville", "state": "47", "county": "037", "latitude": 36.1627, "longitude": -86.7816},
+    {"city": "Portland", "state": "41", "county": "051", "latitude": 45.5152, "longitude": -122.6784},
+    {"city": "Las Vegas", "state": "32", "county": "003", "latitude": 36.1699, "longitude": -115.1398},
+    {"city": "Memphis", "state": "47", "county": "157", "latitude": 35.1495, "longitude": -90.0490},
+    {"city": "Louisville", "state": "21", "county": "111", "latitude": 38.2527, "longitude": -85.7585},
+    {"city": "Baltimore", "state": "24", "county": "510", "latitude": 39.2904, "longitude": -76.6122},
+    {"city": "Milwaukee", "state": "55", "county": "079", "latitude": 43.0389, "longitude": -87.9065},
+    {"city": "Albuquerque", "state": "35", "county": "001", "latitude": 35.0844, "longitude": -106.6504},
+    {"city": "Tucson", "state": "04", "county": "019", "latitude": 32.2226, "longitude": -110.9747},
+    {"city": "Fresno", "state": "06", "county": "019", "latitude": 36.7378, "longitude": -119.7871},
+    {"city": "Sacramento", "state": "06", "county": "067", "latitude": 38.5816, "longitude": -121.4944},
+    {"city": "Kansas City", "state": "29", "county": "095", "latitude": 39.0997, "longitude": -94.5786},
+    {"city": "Atlanta", "state": "13", "county": "121", "latitude": 33.7490, "longitude": -84.3880},
+    {"city": "Miami", "state": "12", "county": "086", "latitude": 25.7617, "longitude": -80.1918},
+    {"city": "Cleveland", "state": "39", "county": "035", "latitude": 41.4993, "longitude": -81.6944},
+    {"city": "New Orleans", "state": "22", "county": "071", "latitude": 29.9511, "longitude": -90.0715},
+    {"city": "Minneapolis", "state": "27", "county": "053", "latitude": 44.9778, "longitude": -93.2650},
+    {"city": "Tampa", "state": "12", "county": "057", "latitude": 27.9506, "longitude": -82.4572},
 ]
 
 # EPA Parameter codes for pollutants
