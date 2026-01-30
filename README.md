@@ -12,9 +12,7 @@ app/
 ├── requirements.txt       # Python dependencies
 ├── Dockerfile            # Docker configuration for deployment
 ├── fly.toml              # Fly.io deployment configuration
-├── .env.example          # Example environment variables
 ├── setup.sh              # Automated setup script
-├── run.sh                # Run script with environment loading
 ├── .streamlit/
 │   └── config.toml       # Streamlit configuration
 ├── .gitignore
