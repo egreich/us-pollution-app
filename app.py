@@ -11,7 +11,7 @@ import requests
 
 # Page configuration with dark theme
 st.set_page_config(
-    page_title="US Data Centers & Water Scarcity",
+    page_title="US Data Centers and Water Scarcity",
     page_icon="💧",
     layout="wide",
     initial_sidebar_state="collapsed"
@@ -45,7 +45,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # Main title
-st.title("US Data Centers & Water Scarcity")
+st.markdown('<h1 style="color: #ffffff; font-weight: bold; font-size: 48px;">US Data Centers & Water Scarcity</h1>', unsafe_allow_html=True)
 st.markdown('<p style="color: #ffffff; font-size: 16px;">Mapping data center infrastructure against state water availability</p>', unsafe_allow_html=True)
 
 def calculate_energy(facility_sqft, power_density_w_sqft, pue=1.2):
@@ -249,7 +249,6 @@ def get_water_source_color(scarcity):
 datacenter_df['color'] = datacenter_df['water_scarcity'].apply(get_water_source_color)
 
 # Create 3D visualization
-st.subheader("Data Center Energy Consumption & Water Scarcity Map")
 
 # Legend in a styled box
 st.markdown("""
