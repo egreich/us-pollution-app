@@ -1,4 +1,4 @@
-# US Pollution Timeline App
+# US Data Center App
 
 An interactive Streamlit application that visualizes data centers across the United States.
 
