@@ -1,21 +1,14 @@
 # US Pollution Timeline App
 
-An interactive Streamlit application that visualizes real EPA pollution data across the United States over time, with markers showing major environmental legislation to highlight the impact of policy on air quality.
+An interactive Streamlit application that visualizes data centers across the United States.
 
-## Features
-
-- Uses the official EPA Air Quality System (AQS) API
-- Visualize pollution levels across major US cities
-- Explore data from the last 10+ years
-- View PM2.5, Ozone, SO2, NO2, and CO levels
-- See how major environmental laws correlate with pollution trends
+Launch the app here: https://us-datacenter-app.fly.dev
 
 ## Project Structure
 
 ```
 app/
 ├── app.py                 # Main Streamlit application
-├── epa_data_loader.py     # EPA API data loader
 ├── requirements.txt       # Python dependencies
 ├── Dockerfile            # Docker configuration for deployment
 ├── fly.toml              # Fly.io deployment configuration
@@ -30,16 +23,15 @@ app/
 
 ## Data Source
 
-This app uses real data from the EPA Air Quality System API.
-**EPA API**: [https://aqs.epa.gov/aqsweb/documents/data_api.html#signup](https://aqs.epa.gov/aqsweb/documents/data_api.html#signup)
-- Official EPA air quality measurements
-- Annual data from monitoring stations across the US
-- Covers PM2.5, Ozone, SO2, NO2, and CO pollutants
+Data Centers:
 
-### Monitored Cities
+Official cloud provider websites (AWS, Google, Microsoft, Meta, Oracle)
+Colocation provider sites (Equinix, Digital Realty)
+Industry publications (Data Center Dynamics)
+Energy estimates based on industry standards for hyperscale facilities
 
-The app fetches data for ta subset of major US cities.
+Water Data:
 
-## License
-
-This project is open source and available under the MIT License.
+USGS (United States Geological Survey)
+U.S. Drought Monitor
+World Resources Institute Aqueduct water risk tool

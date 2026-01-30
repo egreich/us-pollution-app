@@ -10,7 +10,9 @@ ENV/
 .idea/
 *.csv
 data/*.csv
-data_cache/
+!data_cache/
+!data_cache/*.csv
+!data_cache/*.json
 !data/sample_*.csv
 .DS_Store
 .streamlit/secrets.toml
