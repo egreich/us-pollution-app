@@ -4,7 +4,10 @@ WORKDIR /app
 
 # Copy and install requirements
 COPY requirements.txt .
+
+# Install pyarrow separately first to ensure we get prebuilt wheels
 RUN pip install --upgrade pip && \
+    pip install --no-cache-dir pyarrow==14.0.1 && \
     pip install --no-cache-dir -r requirements.txt
 
 # Copy application files
