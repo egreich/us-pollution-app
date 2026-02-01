@@ -9,10 +9,11 @@ Launch the app here: https://us-datacenter-app.fly.dev
 ```
 app/
 ├── app.py                 # Main Streamlit application
+├── datacenters.csv        # Data from business insider article
+├── geocode_counties.y     # Find coordinates of data centers
 ├── requirements.txt       # Python dependencies
 ├── Dockerfile            # Docker configuration for deployment
 ├── fly.toml              # Fly.io deployment configuration
-├── setup.sh              # Automated setup script
 ├── .streamlit/
 │   └── config.toml       # Streamlit configuration
 ├── .gitignore
