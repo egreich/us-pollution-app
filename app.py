@@ -664,6 +664,15 @@ with col2:
 # Summary statistics by facility type
 st.markdown('<h4 style="color: #ffffff;">Facility Type Statistics</h4>', unsafe_allow_html=True)
 
+# Add explanatory text with tooltips
+st.markdown("""
+    <p style="color: #cccccc; font-size: 13px; margin-bottom: 10px;">
+        <strong>Total Energy:</strong> Sum of all facilities of this type &nbsp;|&nbsp; 
+        <strong>Avg Energy:</strong> Average per facility &nbsp;|&nbsp; 
+        <strong>Max Energy:</strong> Largest single facility of this type
+    </p>
+""", unsafe_allow_html=True)
+
 type_stats = datacenter_df.groupby('facility_type', observed=True).agg({
     'provider': 'count',
     'energy_mw': ['sum', 'mean', 'max']
