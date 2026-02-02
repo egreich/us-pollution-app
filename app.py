@@ -829,22 +829,18 @@ st.markdown("---")
 st.markdown('<h3 style="color: #ffffff;">Summary</h3>', unsafe_allow_html=True)
 st.markdown('<ul style="color: #ffffff;"><li><strong>{:.0f}%</strong> of US data centers are located in states with moderate to severe water scarcity</li></ul>'.format(100 * len(datacenter_df[datacenter_df['water_scarcity'] >= 5]) / len(datacenter_df)), unsafe_allow_html=True)
 st.markdown('<ul style="color: #ffffff;"><li>Major cloud providers have significant infrastructure in California, Arizona, and Nevada - among the most water-stressed states</li></ul>', unsafe_allow_html=True)
-st.markdown('<ul style="color: #ffffff;"><li>Data centers consume substantial water for cooling systems, with large facilities using <strong>millions of gallons per day</strong> (<a href="https://www.nature.com/articles/s41545-021-00101-w" target="_blank" style="color: #00BFFF;">Nature study, 2021</a>)</li></ul>', unsafe_allow_html=True)
+st.markdown('<ul style="color: #ffffff;"><li>Data centers consume substantial water for cooling systems, with large facilities using <strong>millions of gallons per day</strong></li></ul>', unsafe_allow_html=True)
 
 st.markdown("---")
 st.markdown('<h3 style="color: #ffffff;">Data Sources & Citations</h3>', unsafe_allow_html=True)
 
-st.markdown('<p style="color: #ffffff;"><strong>Primary Data Source - Data Center Locations & Power Consumption:</strong></p>', unsafe_allow_html=True)
+st.markdown('<p style="color: #ffffff;"><strong>Data Sources - Data Center Locations</strong></p>', unsafe_allow_html=True)
 st.markdown("""
     <ul style="color: #ffffff; line-height: 1.8;">
-        <li><strong>Business Insider Investigation (2024-2025):</strong> "We found over 1,000 data centers in the US. Here's the map." 
+        <li><strong>Business Insider Investigation (2024-2025):</strong>
             <ul style="margin-top: 10px;">
-                <li><a href="https://www.businessinsider.com/map-data-centers-ai-expansion-pollution-power-water-2025-6/" target="_blank" style="color: #00BFFF;">Interactive Map</a> - Explore 1,240+ data center facilities across 46 US states</li>
-                <li><a href="https://www.businessinsider.com/how-calculate-data-center-cost-environmental-impact-methodology-2025-6/" target="_blank" style="color: #00BFFF;">Investigation Methodology</a> - Complete explanation of data collection from state air permits</li>
-                <li><a href="https://www.businessinsider.com/data-center-water-use-crisis-drought-scarce-google-amazon-microsoft-2025-6/" target="_blank" style="color: #00BFFF;">Water Crisis Investigation</a> - Legal battles to obtain water usage data</li>
-                <li><strong>Data Coverage:</strong> 1,240 facilities identified through state air permit applications for backup generators</li>
-                <li><strong>Power Estimates:</strong> 149.6-239.3 TWh/year based on generator capacity analysis</li>
-                <li><strong>Geographic Scope:</strong> All US states and territories (46 states provided data)</li>
+                <li><a href="https://www.businessinsider.com/how-calculate-data-center-cost-environmental-impact-methodology-2025-6/" target="_blank" style="color: #00BFFF;">Investigation Methodology</a></li>
+                <li><a href="https://www.businessinsider.com/data-center-water-use-crisis-drought-scarce-google-amazon-microsoft-2025-6/" target="_blank" style="color: #00BFFF;">Water Crisis Investigation</a></li>
             </ul>
         </li>
     </ul>
